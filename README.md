@@ -50,3 +50,8 @@ Again only module required is sympy:
 ```
 pip install sympy
 ```
+
+# Using GitHub
+For anyone that hasn't used github before, you can download
+this code using the following steps:
+https://www.instructables.com/Downloading-Code-From-GitHub/
