@@ -18,8 +18,8 @@ pip install sympy
 ```
 ### Warning
 This solver relies on the following:
-1. + Node is labelled as node 1 and has potential 1.
-2. - Node is labelled as node 2 and has potential 0.
+1. Firstly + node is labelled as node 1 and has potential 1.
+2. Secondly - Node is labelled as node 2 and has potential 0.
 3. Only one - node and + node exist.
 Note: If multiple + and - nodes exist, they can be combined
 into a single + and - node since they have the same potential.
