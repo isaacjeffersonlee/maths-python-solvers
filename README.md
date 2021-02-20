@@ -1,6 +1,49 @@
 # Intro
-Some nifty little python programmes to automate some long
+Some nifty little python programs to automate some long
 computations.
+
+# Matrix Solver                                                             
+
+### Summary
+Advanced matrix calculator, with the following features:
+
+Available Operations:
+[0]. Quit
+[1]. Multiply Matrices
+[2]. Inverse
+[3]. Transpose
+[4]. Determinant
+[5]. Row reduce to echelon form.
+[6]. Basis for left and right nullspace.
+[7]. Rank and Basis for Row space and Column space
+[8]. Eigenvalues and Eigenvectors
+[9]. Diagonalize/Jordan Normal
+[420]. Sicko mode
+
+### Advantages
+Similar tools exist online such as symbolab or wolfram alpha,
+however my solver has a big advantage in that it saves every matrix output
+after each operation, and so multiple operations can be easily performed
+on the same matrix one after another.
+
+### Inputs:
+Matrix can take integer, fractional and symbolic inputs. 
+E.g 1, 2, 3, 1/2, 11/12, a, b, c, pi, alpha, beta, gamma, delta, e.t.c. 
+(Which get rendered using unicode). 
+
+Because of how floats work in python I have opted to not allow decimal input,
+any decimal input will be truncated to it's integer part. If you want a decimal input,
+i.e 1.2, use a fractional input instead, i.e 6/5.
+
+### Jupyter Version
+This repo has both a .py and .ipynb version. The jupyter version
+has the ability to print in nicely formatted LaTeX so is probably my
+preferred version, although it is also slightly slower.
+
+### Errors:
+If an error occurs, or something takes too long to run,
+just interupt the process and start again.
+
 
 # Ceff Solver
 
