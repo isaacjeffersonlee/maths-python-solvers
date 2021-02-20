@@ -274,7 +274,9 @@ just interupt the process and start again.
             print("")
             try:
                 A_det = A.det()
-                print("Determinant of A: {}".format(A_det))
+                print("Determinant of A:")
+                pprint(A_det)
+                print("")
 
             except NonSquareMatrixError:
                 print("")
