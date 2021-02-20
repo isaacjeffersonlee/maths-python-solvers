@@ -8,17 +8,18 @@ computations.
 Advanced matrix calculator, with the following features:
 
 Available Operations:
-[0]. Quit
-[1]. Multiply Matrices
-[2]. Inverse
-[3]. Transpose
-[4]. Determinant
-[5]. Row reduce to echelon form.
-[6]. Basis for left and right nullspace.
-[7]. Rank and Basis for Row space and Column space
-[8]. Eigenvalues and Eigenvectors
-[9]. Diagonalize/Jordan Normal
-[420]. Sicko mode
+Mode No.    | Mode
+------------| -------------
+1           | Multiply Matrices
+2           | Inverse
+3           | Transpose
+4           | Determinant
+5           | Row reduce to echelon form.
+6           | Basis for left and right nullspace.
+7           | Rank and Basis for Row space and Column space
+8           | Eigenvalues and Eigenvectors
+9           | Diagonalize/Jordan Normal
+420         | sicko mode
 
 ### Advantages
 Similar tools exist online such as symbolab or wolfram alpha,
@@ -29,7 +30,7 @@ on the same matrix one after another.
 ### Inputs:
 Matrix can take integer, fractional and symbolic inputs. 
 E.g 1, 2, 3, 1/2, 11/12, a, b, c, pi, alpha, beta, gamma, delta, e.t.c. 
-(Which get rendered using unicode). 
+(Which get rendered using unicode/LaTeX depending on version). 
 
 Because of how floats work in python I have opted to not allow decimal input,
 any decimal input will be truncated to it's integer part. If you want a decimal input,
