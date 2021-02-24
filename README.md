@@ -19,7 +19,6 @@ Mode No.    | Mode
 7           | Rank and Basis for Row space and Column space
 8           | Eigenvalues and Eigenvectors
 9           | Diagonalize/Jordan Normal
-420         | sicko mode
 
 ### Advantages
 Similar tools exist online such as symbolab or wolfram alpha,
