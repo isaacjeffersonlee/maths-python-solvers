@@ -1,13 +1,9 @@
-# Intro
-Some nifty little python programs to automate some long
-computations.
-
 # Matrix Solver                                                             
+### Author: Isaac Lee
 
 ### Summary
-Advanced matrix calculator, with the following features:
+Advanced matrix (and other things) solver, with the following features:
 
-Available Operations:
 Mode No.    | Mode
 ------------| -------------
 1           | Multiply Matrices
@@ -28,8 +24,8 @@ Mode No.    | Mode
 Similar tools exist online such as symbolab or wolfram alpha,
 however my solver has a big advantage in that it saves every matrix output
 after each operation, and so multiple operations can be easily performed
-on the same matrix one after another.
-
+on the same matrix one after another. Also I have implemented specialist
+modes for Applied maths and Calculus which make large matrix input simple.
 
 ### Inputs:
 
@@ -37,12 +33,34 @@ Input can be integer, decimal, fractional, symbolic inputs and functional input.
 By functional input I mean cos(x), sin(x), exp(-4*x**2), e.t.c. 
 (Which get rendered using unicode). Because of how floats work in python
 I would advice against using any decimal input, instead use a fraction.
+Also can take greek letters, i.e typing in alpha will render as: α, or 
+phi_1 will render as: ϕ₁
                 
 ### Errors:
+
+Sympy interprets certain Greek letters such as beta and gamma as functions
+which will cause errors so if using greek letters and you get:
+"TypeError: unsupported operand type(s) for *: 'FunctionClass' and 'Symbol'"
+Then don't use those letters.
 
 The jupyter notebook version occasionally closes the 
 input field randomly. If this happens just stop
 the cell and re-run it.
+
+### Contents of this repository:
+Note: when downloading/running this repository, make sure to have all files/directories
+in the same directory because they depend on each other.
+
+Images/ -> Contains phase portrait images.
+
+solver_functions.py -> main code function definitions, don't run this file directly.
+
+matrix_solver.py -> base version, can be run as you would a normal python .py file.
+
+matrix_solver_jupyter.ipynb -> jupyter version, best version imo, 
+can print output in nicely formatted LaTeX and display images.
+
+memory.txt -> stores saved matrices for persistant use.
 
 ### Available Modes:
 
