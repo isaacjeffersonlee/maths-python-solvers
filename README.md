@@ -109,7 +109,7 @@ Note: This operation will permanently change any saved
 matrices it operates on.
 
 ##### [11]. Applied Maths Mode
-Two sub-modes, which do a similar thing:
+Contains several sub-modes:
 
 ###### [1]. Ceff Solver
 Takes an incidence matrix for a graph and a vector 
