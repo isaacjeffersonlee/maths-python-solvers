@@ -1,3 +1,5 @@
+import numpy as np
+from matplotlib import pyplot as plt
 from sympy import *
 from sympy.matrices.common import MatrixError
 from fractions import Fraction
@@ -39,7 +41,7 @@ class Solvers:
         if using_jupyter: # If being called from jupyter version
             clear_output(wait=False)
         else:
-            if platform == "linux" or platform == "linux2" or platform == "darwin":
+            if platform == "linux" or platform == "linux32" or platform == "darwin":
                 os.system('clear')
             # Windows
             elif platform == "win32":
@@ -898,9 +900,11 @@ class Solvers:
 
     def print_phase_warning(self):
         print("""
-    Warning: This image is not a plot, rather just a screenshot from the notes 
-    from the correct quadrant. This is to give a general indication of the
-    general shape of the phase portrait for this (det, trace) quadrant.
+The above is a screenshot from the notes to give a general idea of the
+phase portrait in this (trace, det) section. Below is an actual plot
+of the vector field and the lines given by the eigen vectors.
+(Note: no eigenvector lines for complex eigenvectors).
+Combined it is easy to see what the phase portrait should be.
         """)
 
     def jupyter_phase_portrait_printer(self, A):
@@ -1030,6 +1034,55 @@ class Solvers:
         else: # If A is not a 2x2 we don't want to print anything
             pass
 
+    def plot_vf(self, A, x_range=[-5, 5], y_range=[-5, 5], grid=[21, 21]):
+        """
+        Plot vector field for a 2x2 matrix system of ODEs.
+        Also Plots the lines corresponding to eigenvectors.
+        Args: A == 2x2 Sympy Matrix
+        Args: x_range == xlim for plot
+        Args: y_range == ylim for plot
+        Args: grid == grid size to plot
+        # Inspiration: https://gist.github.com/nicoguaro/6767643
+        """
+        if not A.is_square or A.shape[0] != 2: # if A is not 2x2
+            return None
+
+        else:
+            try:
+                x = np.linspace(x_range[0], x_range[1], grid[0])
+                y = np.linspace(y_range[0], y_range[1], grid[1])
+                X , Y  = np.meshgrid(x, y)  # create a grid
+                dxdt = float(A[0,0])*X + float(A[0,1])*Y  # Multiplying out A
+                dydt = float(A[1,0])*X + float(A[1,1])*Y 
+                norm = np.hypot(dxdt, dydt)  # Length of each arrow
+                norm[norm == 0] = 1.0        # Avoid zero division errors 
+                dxdt = dxdt / norm           # Normalize each arrow
+                dydt = dydt / norm
+                # Calculate eigenvectors
+                eigen_triples = A.eigenvects()
+                v1 = eigen_triples[0][2][0] 
+                if len(eigen_triples) == 1: # repeat root
+                    if len(eigen_triples[0][2]) == 1: # dim espace == 1
+                        v2 = v1
+                    else: # eigenspace has two basis
+                        v2 = eigen_triples[0][2][1] 
+                else: # non-repeat evalue
+                    v2 = eigen_triples[1][2][0]
+                if (v1[0].is_real and v1[1].is_real and
+                    v2[0].is_real and v2[1].is_real):
+                    # Plotting eigenvectors, don't plot if complex valued.
+                    plt.plot(float(v1[0])*x,float(v1[1])*y, '-r', color='r') 
+                    plt.plot(float(v2[0])*x,float(v2[1])*y, '-r', color='r') 
+                # Plotting vector field
+                plt.quiver(X, Y, dxdt, dydt, pivot='mid', color='k')
+                plt.axis('equal')
+                plt.xlim(x_range), plt.ylim(y_range)
+                plt.grid('on')
+                plt.show()
+
+            except TypeError: # Symbolic inputs
+                print("Non-numerical input => can't plot vector field!")
+                return None
 
     def get_ode(self, y_string, x_string):
         """
@@ -1078,8 +1131,8 @@ class Solvers:
             print("Options:")
             print("[0]. Return to main menu")
             print("[1]. System of ODEs Solver")
-            # print("[2]. Particular Integral Guess Helper")
-            print("[2]. Singular ODE Solver")
+            print("[2]. Plot phase portrait for a 2x2 matrix system.")
+            print("[3]. Singular ODE Solver")
             print("")
             calculus_mode_choice = input("Option: ")
             self.clear_previous()
@@ -1104,7 +1157,6 @@ class Solvers:
                     variable_string = input("Variable {}: ".format(i+1))
                     variable = Function(variable_string)(t) # e.g convert 'x' to x(t)
                     Y_list.append(variable)
-                    print(Y_list)
                 print("")
                 print("Non-homogenous part vector g(t):")
                 g_list = []
@@ -1125,9 +1177,31 @@ class Solvers:
                 self.dprint(self.simplify_matrix(Matrix([solutions]).T))
                 print("")
                 self.jupyter_phase_portrait_printer(A)
+                print("")
+                print("Plot of the actual vector field and eigenvector lines:")
+                self.plot_vf(A)
+                print("")
                 continue
 
             elif calculus_mode_choice == '2':
+                print("Phase Portrait Plotter for 2x2 matrix systems")
+                while True:
+                    A = self.input_matrix()
+                    if A.shape[0] != 2 or A.shape[1] != 2:
+                        print("Only accepts 2x2 matrices!")
+                        continue
+                    else:
+                        break
+                print("")
+                self.jupyter_phase_portrait_printer(A)
+                print("")
+                print("Plot of the actual vector field and eigenvector lines:")
+                self.plot_vf(A)
+                print("")
+                continue
+
+
+            elif calculus_mode_choice == '3':
                 print("Differential Equation solver")
                 y_string = input("Input dependent variable, i.e y for dy/dx: ")
                 x_string = input("Input independent variable, i.e x for dy/dx: ")
@@ -1232,13 +1306,11 @@ Author: Isaac Lee
 """
     try:
         try:
-            with open('memory.txt', 'rb') as f:
+            with open('memory.txt', 'rb') as f: # load saved matrices
                 file_matrices = pickle.load(f)
                 saved_matrices += [matrix for matrix in file_matrices if matrix not in saved_matrices]
-            # print("Successfully loaded {} matrices from memory.txt".format(len(file_matrices)))
         except FileNotFoundError:
             pass
-            # print("Error: memory.txt not found! Please create.")
 
 
     except EOFError:
@@ -1402,6 +1474,8 @@ Author: Isaac Lee
                 solver.dprint(A_row_reduced)
                 print("")
                 solver.save_matrix(A_row_reduced)
+                if using_jupyter:
+                    display(Image(filename="Images/basis_change.jpg"))
                 print("Result Saved!")
                 print("")
                 main_menu_pause = input("Press any key to return to main menu: ")
@@ -1519,4 +1593,4 @@ if __name__ == "__main__":
     print("Don't run this file...")
     print("Instead run matrix_solver.py or matrix_solver_jupyter.ipynb.")
     print("")
-        
+

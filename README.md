@@ -149,8 +149,23 @@ notes of what general shape the phase portrait will take.
 Warning: This image is not a plot of the exact system,
 rather just a screenshot from the notes demonstrating what 
 a phase portrait in that quadrant should look like.
+Finally plots the actual vector field and eigenvector lines
+using matplotlib and numpy.
 
-###### [2]. Singular ODE Solver
+###### [2]. Plot phase portrait for a 2x2 matrix system.
+Takes in a 2x2 matrix and then finds the det and trace.
+(Jupyter version only), Displays a screenshot from the 
+notes of a generic phase portrait from the corresponding
+(trace, det) sector.
+(Both versions), then plots the vector field 
+and eigenvector lines in red.
+Combining both of these things gives a very good
+idea of what the phase portrait should look like for
+any 2x2 matrix.
+Note: This mode does not work with symbolic inputs, 
+matrix inputs must all be either int, float or fractions.
+
+###### [3]. Singular ODE Solver
 Takes in the dependent and independent variables, i.e y and x,
 the order of the ODE, the coefficients and the non-homogeneous RHS,
 (Right Hand Side) and returns the solutions to both the homogeneous
@@ -177,18 +192,23 @@ just interupt the process/stop the kernel and start again.
 
 ### Dependencies
 The following are libraries used:
+
 - sympy 
+- numpy
+- matplotlib
 - fractions 
 - pickle
 - os
 - sys 
-- IPython.display 
+- IPython
 - jupyter 
+
 However I'm pretty sure the only libraries
-not in the base python install are sympy and jupyter:
+not in the base python install are sympy, numpy, matplotlib and jupyter:
 ```
 pip install sympy
-
+pip install numpy
+pip install matplotlib
 pip install jupyter
 ```
 
