@@ -1,6 +1,3 @@
-# import matplotlib.pyplot as plt
-# import numpy as np
-# from sympy.plotting import plot_parametric
 from sympy import *
 from sympy.matrices.common import MatrixError
 from fractions import Fraction
@@ -8,8 +5,6 @@ import pickle
 import os
 from sys import platform
 from IPython.display import Image, Math, Latex, clear_output
-# saved_matrices = []
-# using_jupyter = False
 
 
 class Solvers:
@@ -1525,23 +1520,3 @@ if __name__ == "__main__":
     print("Instead run matrix_solver.py or matrix_solver_jupyter.ipynb.")
     print("")
         
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#------------------------------------ TESTING ------------------------------------------------------
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-
-# main()
-# For testing purposes
-# A = Matrix([[-1, 0, 1, 0, 0, 0],
-#             [0, 0, -1, 0, 0, 1],
-#             [0, 0, 0, 0, 1, -1],
-#             [0, 0, -1, 0, 1, 0],
-#             [0, 1, -1, 0, 0, 0],
-#             # [1, -1, 0, 0, 0, 0],
-#             # [0, 1, 0, 0, -1, 0],
-#             [0, 1, 0, -1, 0, 0],
-#             [0, 0, 0, 1, -1, 0]])
-
-
-
