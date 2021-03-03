@@ -17,7 +17,7 @@ Mode No.    | Mode
 9           | Diagonalize/Jordan Normal
 10          | Delete rows/cols
 11          | Applied Maths Mode: Ceff Solver, Method of Relaxation, Spring Mass Systems
-12          | Calculus Mode: Systems of Differential Equations, ODE Solver
+12          | Calculus Mode: Phase Portrait Plotter, ODE System Solver, ODE Solver
 13          | Save/Load matrices from file
 
 ### Advantages
