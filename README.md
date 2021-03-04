@@ -10,13 +10,13 @@ Mode No.    | Mode
 2           | Inverse
 3           | Transpose
 4           | Determinant
-5           | Row reduce to echelon form.
-6           | Basis for left and right nullspace.
+5           | Row reduce to echelon form
+6           | Basis for left and right nullspace
 7           | Rank and Basis for Row space and Column space
 8           | Eigenvalues and Eigenvectors
 9           | Diagonalize/Jordan Normal
 10          | Delete rows/cols
-11          | Applied Maths Mode: Ceff Solver, Method of Relaxation, Spring Mass Systems
+11          | Applied Maths Mode: Ceff Solver, Spring Mass Systems, Random Walks and Relaxation
 12          | Calculus Mode: Phase Portrait Plotter, ODE System Solver, ODE Solver
 13          | Save/Load matrices from file
 
@@ -116,14 +116,8 @@ Takes an incidence matrix for a graph and a vector
 of node potentials and vector of net flux divergence
 and finds the unknown node potentials and Ceff. 
 
-###### [2]. Method of relaxation iterator
-Takes in space seperated connected node numbers,
-then generates an adjacency matrix, then uses the 
-method of relaxation to iterate a given number of times,
-printing a list of updated node potentials in both 
-fractional and decimal form after each iteration.
 
-###### [3]. Spring System Solver
+###### [2]. Spring System Solver
 Equilibrium:
 Again takes a matrix and vectors of external forces
 and unknown displacements and solves for the unknown
@@ -134,6 +128,20 @@ Non-equilibrium:
 Takes incidence matrix, unknown displacements and external forces
 and solves for the displacements as a function of time using
 Newtons Second Law. Also gives eigenvectors and eigenvalues.
+
+###### [3]. Method of Relaxation iterator
+Takes in space seperated connected node numbers,
+then generates an adjacency matrix, then uses the 
+method of relaxation to iterate a given number of times,
+printing a list of updated node potentials in both 
+fractional and decimal form after each iteration.
+
+
+###### [4]. Hitting Probability estimator
+Estimates the probability that if we start on a given
+node we hit a node(s) before another specified node(s).
+Uses the random module and assumes all hopping probabilities
+are equally distributed.
 
 ##### [12]. Calculus Mode: Differential Equations
 ###### [1]. System ODEs Solver
