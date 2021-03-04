@@ -3,6 +3,7 @@ from matplotlib import pyplot as plt
 from sympy import *
 from sympy.matrices.common import MatrixError
 from fractions import Fraction
+import random
 import pickle
 import os
 from sys import platform
@@ -152,7 +153,7 @@ class Solvers:
         Args: boundary_node_idx, type == list, indexes of the boundary nodes, 
         which don't get touched by the iterations.
         Args: A, type == Sympy Matrix, Adjacency Matrix, consisting of 1s and 0s
-        Args: n, type == positive integer
+        Args: n, type == positive int
         """
         potentials = start_potentials
         print("Starting node potentials:")
@@ -176,6 +177,43 @@ class Solvers:
             print("")
 
         return potentials
+
+
+    def node_jump(self, A, current_node):
+        """Randomly select and return a connected node number."""
+        ith_row = list(A.row([current_node - 1])) # - 1 because we start from 1
+        connected_idx = [i + 1 for i in range(len(ith_row)) if ith_row[i] == 1]
+        next_node = random.choice(connected_idx)
+
+        return next_node
+
+
+    def hitting_prob(self, A, start_node, good_nodes, bad_nodes, N=5000):
+        """
+        Return hitting probability for good_nodes.
+        The probability we hit any of the good_nodes
+        before we hit any of the bad_nodes.
+        Args: A == Adjacency matrix for the graph, type == Sympy matrix
+        Args: start_node, type == int
+        Args: good_nodes, type == list
+        Args: bad_nodes, type == list
+        Args: N == number of iterations, type == int > 0
+        """
+        hits = 0
+        for n in range(N):
+            current_node = start_node
+            while True: 
+                if current_node in good_nodes:
+                    hits += 1
+                    break
+                elif current_node in bad_nodes:
+                    break
+                else:
+                    current_node = self.node_jump(A, current_node)
+
+        hitting_prob = hits / N
+
+        return hitting_prob
 
 
     def input_matrix(self):
@@ -428,8 +466,9 @@ class Solvers:
             print("Mode 11: Applied Maths Mode")
             print("[0]. Return to main menu")
             print("[1]. Electric Circuits: Solve for Ceff and potentials")
-            print("[2]. Method of relaxation iterator")
-            print("[3]. Spring Mass Systems: Solve for displacement and external forces")
+            print("[2]. Spring Mass Systems: Solve for displacement and external forces")
+            print("[3]. Method of relaxation iterator")
+            print("[4]. Hitting probability estimator")
             print("")
             applied_maths_mode_choice = input("Option: ")
             self.clear_previous()
@@ -569,47 +608,9 @@ class Solvers:
 
                     break # Break out of applied maths mode
 
+
+
             elif applied_maths_mode_choice == '2':
-                self.clear_previous()
-                print("Method of relaxation iterator:")
-                print("")
-                A = self.input_adjacency()
-                print("")
-                print("Adjacency Matrix:")
-                self.dprint(A)
-                print("")
-                num_nodes = A.shape[0]
-                while True:
-                    try:
-                        print("Input Node numbers (space seperated):")
-                        source_node_idx_string = input("Source Nodes: ").split(" ")
-                        source_node_idx = [int(node) - 1 for node in source_node_idx_string]
-                        sink_node_idx_string = input("Sink Nodes: ").split(" ")
-                        sink_node_idx = [int(node) - 1 for node in sink_node_idx_string]
-                        break
-                    except ValueError:
-                        print("Detected non-integer input!")
-
-                boundary_node_idx = source_node_idx + sink_node_idx
-                node_potentials = [0] * num_nodes
-                for idx in source_node_idx:
-                    node_potentials[idx] = 1
-
-                while True:
-                    try:
-                        print("")
-                        num_iterations = int(input("Number of iterations: "))
-                        break
-                    except ValueError:
-                        print("INTEGER INTEGER INTEGER YOU MORON!")
-
-                print("")
-                print("Iterating...")
-                self.harmonic_iterator(node_potentials, boundary_node_idx, A, num_iterations)
-                print("")
-
-
-            elif applied_maths_mode_choice == '3':
                 self.clear_previous()
                 print("")
                 print("Spring Mass System Solver")
@@ -892,6 +893,87 @@ class Solvers:
                     print("Displacement solutions expanded: ")
                     for solution in solutions:
                         self.dprint(solution.rewrite(exp).simplify().expand())
+
+
+            elif applied_maths_mode_choice == '3':
+                self.clear_previous()
+                print("Method of relaxation iterator:")
+                print("")
+                A = self.input_adjacency()
+                print("")
+                print("Adjacency Matrix:")
+                self.dprint(A)
+                print("")
+                num_nodes = A.shape[0]
+                while True:
+                    try:
+                        print("Input Node numbers (space seperated):")
+                        source_node_idx_string = input("Source Nodes: ").split(" ")
+                        source_node_idx = [int(node) - 1 for node in source_node_idx_string]
+                        sink_node_idx_string = input("Sink Nodes: ").split(" ")
+                        sink_node_idx = [int(node) - 1 for node in sink_node_idx_string]
+                        break
+                    except ValueError:
+                        print("Detected non-integer input!")
+
+                boundary_node_idx = source_node_idx + sink_node_idx
+                node_potentials = [0] * num_nodes
+                for idx in source_node_idx:
+                    node_potentials[idx] = 1
+
+                while True:
+                    try:
+                        print("")
+                        num_iterations = int(input("Number of iterations: "))
+                        break
+                    except ValueError:
+                        print("INTEGER INTEGER INTEGER YOU MORON!")
+
+                print("")
+                print("Iterating...")
+                self.harmonic_iterator(node_potentials, boundary_node_idx, A, num_iterations)
+                print("")
+
+            elif applied_maths_mode_choice == '4':
+                self.clear_previous()
+                print("Hitting probability estimator:")
+                print("")
+                A = self.input_adjacency()
+                print("")
+                print("Adjacency Matrix:")
+                self.dprint(A)
+                print("")
+                print("This mode will calculate the probability we hit a certain")
+                print("node(s) before another node(s), given the choice of connected")
+                print("nodes is equally likely.")
+                print("")
+                print("Note: we define 'good nodes' as the nodes we want to calculate the")
+                print("probability of hitting before the 'bad nodes'.")
+                while True: # cleanse input loop
+                    try:
+                        good_nodes = [int(node) for node in input("Space seperated good nodes: ").split(" ")]
+                        bad_nodes = [int(node) for node in input("Space seperated bad nodes: ").split(" ")]
+                        start_node = int(input("Start node: "))
+                        print("")
+                        print(f"The (estimate) probability of hitting nodes {good_nodes} before nodes {bad_nodes}")
+                        print(f"given we start at node {start_node}:")
+                        print("")
+                        for i in range(3):
+                            prob = self.hitting_prob(A, start_node, good_nodes, bad_nodes)
+                            print(f"Estimate {i+1}: {prob}")
+                        print("")
+                        print("Warning: this is not the true value, rather an estimate using random numbers")
+                        print("so some variance is expected.")
+                        print("")
+                        go_again_choice = input("Change nodes? y/n: ")
+                        if go_again_choice == "y":
+                            continue
+                        else:
+                            break
+
+                    except ValueError:
+                        print("Please give an int > 0!")
+                        continue
 
             else:
                 print("Not a valid input!")
