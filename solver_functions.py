@@ -456,6 +456,72 @@ class Solvers:
                 print("Not a valid input!")
 
 
+    def calculate_laplacian(self):
+        """Ask for either Laplacian or Incidence matrix input and return the laplacian"""
+        while True:
+            matrix_choice = input("Input matrix type: Laplacian [l] or Incidence [i]: ")
+            print("")
+            if matrix_choice == 'i':
+                print("")
+                print("Incidence matrix:")
+                A = self.input_matrix()
+                print("")
+                self.dprint(A)
+                print("")
+                self.save_matrix(A)
+                A_row_num = A.shape[0]
+                while True:
+                    conductance_choice = input("Unit edge weights? y/n: ")
+                    if conductance_choice == 'y': # All edges have unit conductance
+                        K = (A.T) * A
+                        print("Laplacian K = A.T * A:")
+                        self.dprint(K)
+                        print("")
+                        break
+
+                    elif conductance_choice == 'n':
+                        edge_weights = []
+                        print("Please give edge weights")
+                        for i in range(1, A_row_num + 1):
+                            edge_weight = self.get_input("Weight {}, corresponding to row {}: ".format(i, i))
+                            edge_weights.append(edge_weight)
+
+                        C = zeros(A_row_num, A_row_num) # Matrix of edge weights
+                        for i in range(len(edge_weights)):
+                            C[i,i] = edge_weights[i]
+                        print("")
+                        print("Matrix of edge weights:")
+                        self.dprint(C)
+                        print("")
+                        K = (A.T) * C * A # Weighted Laplacian
+                        print("Weighted Laplacian K = A.T * C * A:")
+                        self.dprint(K)
+                        print("")
+                        break
+
+                    else:
+                        print("Please input y/n!")
+                        continue
+
+            elif matrix_choice == 'l':
+                print("")
+                print("Input Laplacian Matrix: ")
+                K = self.input_matrix()
+                print("")
+                self.dprint(K)
+                print("")
+                if K.shape[0] != K.shape[1]: # Non-square matrix
+                    print("K must be a square matrix!")
+                    continue
+                break
+
+            else: # input is not 'l' or 'i'
+                print(f"{matrix_choice} is not a valid input! Please input l or i...")
+                continue
+
+            break
+        return K
+
 
     def applied_maths_mode(self):
         """Mode for various graph calculations based off incidence matrix"""
@@ -480,43 +546,8 @@ class Solvers:
                 self.clear_previous()
                 print("")
                 print("Electric Circuits Solver")
-                print("Incidence matrix:")
-                A = self.input_matrix()
-                print("")
-                self.dprint(A)
-                print("")
-                A_row_num = A.shape[0]
                 while True:
-                    conductance_choice = input("Unit conductance? y/n: ")
-                    if conductance_choice == 'y': # All edges have unit conductance
-                        K = (A.T) * A
-                        print("Laplacian K = A.T * A:")
-                        self.dprint(K)
-                        print("")
-
-                    elif conductance_choice == 'n':
-                        edge_weights = []
-                        print("Please give edge weights")
-                        for i in range(1, A_row_num + 1):
-                            edge_weight = self.get_input("Weight {}, corresponding to row {}: ".format(i, i))
-                            edge_weights.append(edge_weight)
-
-                        C = zeros(A_row_num, A_row_num) # Matrix of edge weights
-                        for i in range(len(edge_weights)):
-                            C[i,i] = edge_weights[i]
-                        print("")
-                        print("Matrix of edge weights:")
-                        self.dprint(C)
-                        print("")
-                        K = (A.T) * C * A # Weighted Laplacian
-                        print("Weighted Laplacian K = A.T * C * A:")
-                        self.dprint(K)
-                        print("")
-
-                    else:
-                        print("Please input y/n!")
-                        continue
-
+                    K = self.calculate_laplacian()
                     IK = ImmutableMatrix(K) # Making sure our saved K doesn't get overwritten
                     self.save_matrix(IK)
                     K_row_num = IK.shape[0]
@@ -617,30 +648,31 @@ class Solvers:
                 print("")
                 equilibrium_choice = input("Is the system in equilibrium? y/n: ")
                 if equilibrium_choice == 'y':
-                    print("")
-                    print("Incidence matrix:")
-                    A = self.input_matrix()
-                    print("")
-                    self.dprint(A)
-                    print("")
-                    A_row_num = A.shape[0]
+                    # print("")
+                    # print("Incidence matrix:")
+                    # A = self.input_matrix()
+                    # print("")
+                    # self.dprint(A)
+                    # print("")
+                    # A_row_num = A.shape[0]
+                    K = self.calculate_laplacian()
                     while True:
-                        edge_weights = []
-                        print("Please give spring constants, (edge weights)")
-                        for i in range(1, A_row_num + 1):
-                            edge_weight = self.get_input("Spring constant {}, corresponding to row {}: ".format(i, i))
-                            edge_weights.append(edge_weight)
-                        C = zeros(A_row_num, A_row_num) # Matrix of edge weights
-                        for i in range(len(edge_weights)):
-                            C[i,i] = edge_weights[i]
-                        print("")
-                        print("Matrix of spring constants:")
-                        self.dprint(C)
-                        print("")
-                        K = (A.T) * C * A # Weighted Laplacian
-                        print("Weighted Laplacian K = A.T * C * A:")
-                        self.dprint(K)
-                        print("")
+                        # edge_weights = []
+                        # print("Please give spring constants, (edge weights)")
+                        # for i in range(1, A_row_num + 1):
+                        #     edge_weight = self.get_input("Spring constant {}, corresponding to row {}: ".format(i, i))
+                        #     edge_weights.append(edge_weight)
+                        # C = zeros(A_row_num, A_row_num) # Matrix of edge weights
+                        # for i in range(len(edge_weights)):
+                        #     C[i,i] = edge_weights[i]
+                        # print("")
+                        # print("Matrix of spring constants:")
+                        # self.dprint(C)
+                        # print("")
+                        # K = (A.T) * C * A # Weighted Laplacian
+                        # print("Weighted Laplacian K = A.T * C * A:")
+                        # self.dprint(K)
+                        # print("")
                         IK = ImmutableMatrix(K) # Making sure our saved K doesn't get overwritten
                         self.save_matrix(IK)
                         K_row_num = IK.shape[0]
@@ -753,30 +785,31 @@ class Solvers:
 
                 elif equilibrium_choice == 'n':
                     print("Newtons 2nd Law Problem:")
-                    print("")
-                    print("Incidence matrix:")
-                    t = Symbol('t') # Define the time independent variable
-                    A = self.input_matrix()
-                    print("")
-                    self.dprint(A)
-                    print("")
-                    A_row_num = A.shape[0]
-                    edge_weights = []
-                    print("Please give spring constants, (edge weights)")
-                    for i in range(1, A_row_num + 1):
-                        edge_weight = self.get_input("Spring constant {}, corresponding to row {}: ".format(i, i))
-                        edge_weights.append(edge_weight)
-                    C = zeros(A_row_num, A_row_num) # Matrix of edge weights
-                    for i in range(len(edge_weights)):
-                        C[i,i] = edge_weights[i]
-                    print("")
-                    print("Matrix of spring constants:")
-                    self.dprint(C)
-                    print("")
-                    K = (A.T) * C * A # Weighted Laplacian
-                    print("Weighted Laplacian K = A.T * C * A:")
-                    self.dprint(K)
-                    print("")
+                    # print("")
+                    # print("Incidence matrix:")
+                    # t = Symbol('t') # Define the time independent variable
+                    # A = self.input_matrix()
+                    # print("")
+                    # self.dprint(A)
+                    # print("")
+                    # A_row_num = A.shape[0]
+                    # edge_weights = []
+                    # print("Please give spring constants, (edge weights)")
+                    # for i in range(1, A_row_num + 1):
+                    #     edge_weight = self.get_input("Spring constant {}, corresponding to row {}: ".format(i, i))
+                    #     edge_weights.append(edge_weight)
+                    # C = zeros(A_row_num, A_row_num) # Matrix of edge weights
+                    # for i in range(len(edge_weights)):
+                    #     C[i,i] = edge_weights[i]
+                    # print("")
+                    # print("Matrix of spring constants:")
+                    # self.dprint(C)
+                    # print("")
+                    # K = (A.T) * C * A # Weighted Laplacian
+                    # print("Weighted Laplacian K = A.T * C * A:")
+                    # self.dprint(K)
+                    # print("")
+                    K = self.calculate_laplacian()
                     IK = ImmutableMatrix(K) # Making sure our saved K doesn't get overwritten
                     self.save_matrix(IK)
                     K_row_num = IK.shape[0]
