@@ -1248,6 +1248,7 @@ Combined it is easy to see what the phase portrait should be.
             print("[1]. System of ODEs Solver")
             print("[2]. Plot phase portrait for a 2x2 matrix system.")
             print("[3]. Singular ODE Solver")
+            print("[4]. Non standard form non-linear ODE Solver")
             print("")
             calculus_mode_choice = input("Option: ")
             self.clear_previous()
@@ -1328,6 +1329,19 @@ Combined it is easy to see what the phase portrait should be.
                 self.dprint(dsolve(solutions[0], y))
                 print("Full general solution with non-homogenous part:")
                 self.dprint(dsolve(solutions[1], y))
+
+            elif calculus_mode_choice == '4':
+                print("Non-linear solver")
+                print("Please use y and x for the variables.")
+                print("Re-arrange so RHS = 0, i.e if y(x).diff() = 4 + x**2, then input: y(x).diff - 4 - x**2")
+                print("Example input: y(x).diff() - (2*x*y(x))/(x**2 - y(x)**2)")
+                print("Use y(x).diff() for dy/dx, y(x).diff().diff() for d^2y/dx^2 e.t.c and y(x) for y")
+                x = Symbol('x')
+                y = Function('y')(x)
+                system = sympify(input("Differential equation: "))
+                solutions = dsolve(system, y)
+                self.dprint(solutions)
+                continue
 
             else:
                 print("Not a valid input!")
