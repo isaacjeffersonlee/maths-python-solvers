@@ -1249,6 +1249,7 @@ Combined it is easy to see what the phase portrait should be.
             print("[2]. Plot phase portrait for a 2x2 matrix system.")
             print("[3]. Singular ODE Solver")
             print("[4]. Non standard form non-linear ODE Solver")
+            print("[5]. Multiple variable contour plotter.")
             print("")
             calculus_mode_choice = input("Option: ")
             self.clear_previous()
@@ -1341,6 +1342,20 @@ Combined it is easy to see what the phase portrait should be.
                 system = sympify(input("Differential equation: "))
                 solutions = dsolve(system, y)
                 self.dprint(solutions)
+                continue
+
+            elif calculus_mode_choice == '5':
+                delta = 0.025
+                x_values = np.linspace(-2.0, 2.0, 101)
+                y_values = np.linspace(-2.0, 2.0, 101)
+                X, Y = np.meshgrid(x_values, y_values)
+                print("Plot function of 2 variables, X, Y.")
+                print("Note: for exp, use np.exp().")
+                U = eval(input("u(X,Y) = "))
+                fig, ax = plt.subplots()
+                CS = ax.contour(X, Y, U, 30)
+                ax.clabel(CS, inline=True, fontsize=10)
+                plt.show()
                 continue
 
             else:
