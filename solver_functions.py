@@ -824,6 +824,7 @@ class Solvers:
                         if phi_string == '0':
                             phi = 0
                         else:
+                            t = Symbol('t')
                             phi = Function(phi_string)(t)
                         X[i,0] = phi
                     print("")
