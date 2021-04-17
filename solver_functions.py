@@ -336,8 +336,9 @@ class Solvers:
         print("[10]. Delete rows/cols")
         print("[11]. Applied Maths Mode")
         print("[12]. Calculus Mode: Differential Equations")
-        print("[13]. Save/Load matrices from file")
-        print("[14]. How To guide")
+        print("[13]. Groups Mode: Permutations")
+        print("[14]. Save/Load matrices from file")
+        print("[15]. How To guide")
         print("")
         available_nums = list(range(15))
         available_nums.append(420) 
@@ -1363,6 +1364,57 @@ Combined it is easy to see what the phase portrait should be.
                 print("Not a valid input!")
                 continue
 
+    def groups_mode(self):
+        """Linear Algebra Groups mode."""
+        print("Groups Mode:") 
+        print("This mode takes in a permutation and returns")
+        print("all powers of the permutation up to and including")
+        print("the order of the permutation.")
+        print("For input give a space seperated list.")
+        print("For example: if we have [1 2 3 4 5 6 7]")
+        print("                        [7 6 2 1 3 5 4]")
+        print("")
+        print("Then the input would be: 7 6 2 1 3 5 4")
+        print("Note: this is not disjoint cycle form notation!")
+        print("")
+
+        while True:
+            try:
+                output_list = [int(entry) for entry in
+                            input("Space seperated entries: ").split(" ")]
+                idx_list = list(range(len(output_list)))
+                input_list = [idx + 1 for idx in idx_list] # 1 as first entry instead of 0
+                dic = {output_list[i] - 1 : idx_list[i] for i in idx_list}
+                if input_list == output_list:
+                    print("Input is the identity and therefore has order 1.")
+                    continue
+
+                def permute(dic, k, n):
+                    alpha = k
+                    for i in range(n):
+                        alpha = dic[alpha]
+                    return alpha
+
+                n = 2 # starting power
+                max_permutations = 1000
+                while n <= 1000:
+                    permuted_list = [permute(dic, i, n) + 1 for i in range(len(dic))]
+                    print(f"Power: {n}")
+                    print(input_list)
+                    print(permuted_list)
+                    print(">>>>>>>>>>>>>>>>>>>>>")
+                    if permuted_list == input_list:
+                        print(f"Identity found! ord(permutation) = {n}")
+                        break
+                    n += 1
+                main_menu_pause = input("Press any key to return to main menu: ")
+                break
+
+            except KeyError:
+                print("Not a valid permutation!")
+                continue
+
+        
 
     def save_or_load_mode(self):
         """Save currently saved matrices to file or load from file."""
@@ -1715,9 +1767,13 @@ Author: Isaac Lee
 
             elif mode_num == 13:
                 solver.clear_previous()
-                solver.save_or_load_mode()
+                solver.groups_mode()
 
             elif mode_num == 14:
+                solver.clear_previous()
+                solver.save_or_load_mode()
+
+            elif mode_num == 15:
                 solver.clear_previous()
                 with open('README.md', 'r') as f: # Print out contents of README.md
                     print(f.read())
