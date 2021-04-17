@@ -18,7 +18,8 @@ Mode No.    | Mode
 10          | Delete rows/cols
 11          | Applied Maths Mode: Ceff Solver, Spring Mass Systems, Random Walks and Relaxation
 12          | Calculus Mode: Phase Portrait Plotter, ODE System Solver, ODE Solver
-13          | Save/Load matrices from file
+13          | Groups Mode: Compute order of a permutation from Sn and calculate powers.
+14          | Save/Load matrices from file
 
 ### Advantages
 Similar tools exist online such as symbolab or wolfram alpha,
