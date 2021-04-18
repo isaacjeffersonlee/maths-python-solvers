@@ -340,7 +340,7 @@ class Solvers:
         print("[14]. Save/Load matrices from file")
         print("[15]. How To guide")
         print("")
-        available_nums = list(range(15))
+        available_nums = list(range(16))
         available_nums.append(420) 
         while True:
             try:
