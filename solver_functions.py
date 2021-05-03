@@ -1363,59 +1363,209 @@ Combined it is easy to see what the phase portrait should be.
             else:
                 print("Not a valid input!")
                 continue
-
+                
     def groups_mode(self):
         """Linear Algebra Groups mode."""
-        print("Groups Mode:") 
-        print("This mode takes in a permutation and returns")
-        print("all powers of the permutation up to and including")
-        print("the order of the permutation.")
-        print("For input give a space seperated list.")
-        print("For example: if we have [1 2 3 4 5 6 7]")
-        print("                        [7 6 2 1 3 5 4]")
-        print("")
-        print("Then the input would be: 7 6 2 1 3 5 4")
-        print("Note: this is not disjoint cycle form notation!")
-        print("")
 
-        while True:
-            try:
-                output_list = [int(entry) for entry in
-                            input("Space seperated entries: ").split(" ")]
-                idx_list = list(range(len(output_list)))
-                input_list = [idx + 1 for idx in idx_list] # 1 as first entry instead of 0
-                dic = {output_list[i] - 1 : idx_list[i] for i in idx_list}
-                if input_list == output_list:
-                    print("Input is the identity and therefore has order 1.")
-                    continue
+        def disjointCycleForm(perm):
+            """
+            Takes a permuation written in typical form, and returns the same permuation in disjoin cycle form.
 
-                def permute(dic, k, n):
-                    alpha = k
-                    for i in range(n):
-                        alpha = dic[alpha]
-                    return alpha
+            Parameters:
 
-                n = 2 # starting power
-                max_permutations = 1000
-                while n <= 1000:
-                    permuted_list = [permute(dic, i, n) + 1 for i in range(len(dic))]
-                    print(f"Power: {n}")
-                    print(input_list)
-                    print(permuted_list)
-                    print(">>>>>>>>>>>>>>>>>>>>>")
-                    if permuted_list == input_list:
-                        print(f"Identity found! ord(permutation) = {n}")
+                perm (list): A list representing the mapping of the permutation
+
+            Returns:
+
+                disjoint_cycle (list): The permutation written as a list in disjoint cycle form
+            """
+            
+            # Initialises the disjoint_cycle list
+            disjoint_cycle = []
+            # Iterates over all integers in the permuation
+            for i in perm:
+                # If i is already present in on of the cycles in disjoint_cycle, then we know what it maps to, so we can skip it
+                for cycle in disjoint_cycle:
+                    if i in cycle:
                         break
-                    n += 1
-                main_menu_pause = input("Press any key to return to main menu: ")
+                else:
+                    # Otherwise we initialise a cycle containing i
+                    cycle = [i]
+                    # We take the image of i
+                    i = perm[i - 1]
+                    # If i is not already part of our cycle, then we continue, otherwise we terminate
+                    while i not in cycle:
+                        # We append the image to the cycle, and take the image of i iteratively
+                        cycle.append(i)
+                        i = perm[i - 1]
+                    # We then add this cycle to the list of disjoint cycles
+                    disjoint_cycle.append(cycle)
+
+            # We have found the map of all points in the permuation, so we return
+            return disjoint_cycle
+
+        def disjointProduct(cycles, n):
+            """
+            Takes the composition of permuations written in disjoint cycle form in S_n, returning the product in disjoin cycles.
+
+            Parameters:
+
+                cycles (list): A list of disjoint cycles which will be composed in reverse order
+                n (int): An interger containing the number of the symmetry group the permuations are a part of
+
+            Returns:
+
+                disjoint_cycle (list): A list of disjoint cycles which are also written as lists
+            """
+            # Initialises the disjoint_cycle list
+            disjoint_cycle = []
+            # Iterates over all integers 1 through n
+            for a in range(1, n + 1):
+                # If a is already present in on of the cycles in disjoint_cycle, then we know what it maps to, so we can skip it
+                for cycle in disjoint_cycle:
+                    if a in cycle:
+                        break
+                else:
+                    # Otherwise we initialise a cycle containing a
+                    cycle = [a]
+                    # While the cycle is open and has not returned to its initial value, we iterate
+                    # This is lazy but I cba, this is the day before the exam
+                    while True:
+                        # Iterate over all permuations (note that the composition is done in reverse to how you would expect)
+                        for perm in cycles:
+                            # If a is in the support of the permuation, we take its image
+                            if a in perm:
+                                i = perm.index(a)
+                                a = perm[(i + 1) % len(perm)]
+                        # If the image is already in the cycle, we terminate
+                        if a in cycle:
+                            break
+                        else:
+                            # Add the image to the cycle and continue
+                            cycle.append(a)
+
+                    # Append the closed cycle to the list
+                    disjoint_cycle.append(cycle)
+            
+            # All integers 1 to n have been mapped, so we return
+            return disjoint_cycle
+
+        using_jupyter = self.using_jupyter
+        print("")
+        print("Groups Mode:")
+        while True:
+            print("")
+            print("Options:")
+            print("[0]. Return to main menu")
+            print("[1]. Powers of a permutation")
+            print("[2]. Convert to Disjoint Cycle Form")
+            print("[3]. Product of permutations written in Disjoint Cycle Form")
+            print("")
+            groups_mode_choice = input("Option: ")
+            self.clear_previous()
+            if groups_mode_choice == '0':
                 break
 
-            except KeyError:
-                print("Not a valid permutation!")
-                continue
+            elif groups_mode_choice == '1': 
+                print("This mode takes in a permutation and returns")
+                print("all powers of the permutation up to and including")
+                print("the order of the permutation.")
+                print("For input give a space seperated list.")
+                print("For example: if we have [1 2 3 4 5 6 7]")
+                print("                        [7 6 2 1 3 5 4]")
+                print("")
+                print("Then the input would be: 7 6 2 1 3 5 4")
+                print("Note: this is not disjoint cycle form notation!")
+                print("")
 
-        
+                while True:
+                    try:
+                        output_list = [int(entry) for entry in
+                                    input("Space seperated entries: ").split(" ")]
+                        idx_list = list(range(len(output_list)))
+                        input_list = [idx + 1 for idx in idx_list] # 1 as first entry instead of 0
+                        dic = {output_list[i] - 1 : idx_list[i] for i in idx_list}
+                        if input_list == output_list:
+                            print("Input is the identity and therefore has order 1.")
+                            continue
 
+                        def permute(dic, k, n):
+                            alpha = k
+                            for i in range(n):
+                                alpha = dic[alpha]
+                            return alpha
+
+                        n = 2 # starting power
+                        max_permutations = 1000
+                        while n <= 1000:
+                            permuted_list = [permute(dic, i, n) + 1 for i in range(len(dic))]
+                            print(f"Power: {n}")
+                            print(input_list)
+                            print(permuted_list)
+                            print(">>>>>>>>>>>>>>>>>>>>>")
+                            if permuted_list == input_list:
+                                print(f"Identity found! ord(permutation) = {n}")
+                                break
+                            n += 1
+                        main_menu_pause = input("Press any key to return to main menu: ")
+                        break
+
+                    except KeyError:
+                        print("Not a valid permutation!")
+                        continue
+
+            elif groups_mode_choice == '2': 
+                print("This mode takes in a permutation and returns")
+                print("the permutation in disjoint cycle form.")
+                print("For example: if we have [1 2 3 4 5 6 7]")
+                print("                        [7 6 2 1 3 5 4]")
+                print("")
+                print("Then the input would be: 7 6 2 1 3 5 4")
+                print("Note: this is not disjoint cycle form notation!")
+                print("")
+
+                while True:
+                    try:
+                        output_list = [int(entry) for entry in
+                                    input("Space seperated entries: ").split(" ")]
+                        print(disjointCycleForm(output_list))
+                        main_menu_pause = input("Press any key to return to main menu: ")
+                        break
+
+                    except KeyError:
+                        print("Not a valid permutation!")
+                        continue
+
+            elif groups_mode_choice == '3': 
+                print("This mode takes multiple disjoint cycles and then") 
+                print("takes their composition, returning the result")
+                print("in disjoint cycle form.")
+
+                print("Input symmetric group number. So for S_3, enter 3.")
+                group_number = int(input("Symmetric Group number: "))
+                self.clear_previous()
+
+                length = int(input("Input number of cycles: "))
+                self.clear_previous()
+
+                print("Input cycles in reverse order. So for g(f), write f then g.")
+
+                cycles = []
+                for i in range(length):
+                    while True:
+                        try:
+                            output_list = [int(entry) for entry in
+                                        input("Space seperated entries: ").split(" ")]
+                            cycles.append(output_list)
+                            break
+
+                        except KeyError:
+                            print("Not a valid permutation!")
+                            continue
+
+                print(disjointProduct(cycles, group_number))
+                main_menu_pause = input("Press any key to return to main menu: ")
+                
     def save_or_load_mode(self):
         """Save currently saved matrices to file or load from file."""
         saved_matrices = self.saved_matrices
