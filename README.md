@@ -52,16 +52,16 @@ the cell and re-run it.
 Note: when downloading/running this repository, make sure to have all files/directories
 in the same directory because they depend on each other.
 
-Images/ -> Contains phase portrait images.
+[Images/] : Contains phase portrait images.
 
-solver_functions.py -> main code function definitions, don't run this file directly.
+[solver_functions.py] : main code function definitions, don't run this file directly.
 
-matrix_solver.py -> base version, can be run as you would a normal python .py file.
+[matrix_solver.py] : base version, can be run as you would a normal python .py file.
 
-matrix_solver_jupyter.ipynb -> jupyter version, best version imo, 
+[matrix_solver_jupyter.ipynb] : jupyter version, best version imo, 
 can print output in nicely formatted LaTeX and display images.
 
-memory.txt -> stores saved matrices for persistant use.
+[memory.txt] : stores saved matrices for persistant use.
 
 ### Available Modes:
 
@@ -220,8 +220,3 @@ pip install numpy
 pip install matplotlib
 pip install jupyter
 ```
-
-# Using GitHub
-For anyone that hasn't used github before, you can download
-this code using the following steps:
-https://www.instructables.com/Downloading-Code-From-GitHub/
